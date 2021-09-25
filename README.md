@@ -2,4 +2,4 @@
 
 ### Family Websites
 
-[trevor](https://www.lauder.family/trevor/).
+* [Trevor](https://www.lauder.family/trevor/)
