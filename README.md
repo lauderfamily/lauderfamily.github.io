@@ -1,5 +1,5 @@
 ## Lauder Family
 
-### Family Websites
+### Family Member Websites
 
 * [Trevor](https://www.lauder.family/trevor/)
