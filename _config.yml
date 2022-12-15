@@ -1,1 +1,108 @@
-theme: jekyll-theme-cayman
+title: Trevor Lauder
+masthead_title: Everything SRE, DevOps, Code and Photography
+description: Everything SRE, DevOps, Code and Photography
+minimal_mistakes_skin: default
+search: true
+favicon: /assets/images/favicon.ico
+url: https://www.lauder.family
+baseurl: /
+repository: lauderfamily/lauderfamily.github.io
+logo: /assets/images/site-logo.webp
+og_image: /assets/images/og.webp
+teaser: /assets/images/og.webp
+
+formspree: mbjqwvgk
+contact_page_description: Have any questions about the content on this page?  You are welcome to contact me using the form below!
+thankyou_page_description: Your message has been successfully sent.
+
+markdown: kramdown
+remote_theme: mmistakes/minimal-mistakes@4.24.0
+
+permalink: pretty
+paginate: 5
+paginate_path: /page:num/
+timezone: Canada/Mountain
+
+include:
+  - _pages
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
+  - jemoji
+  - jekyll-include-cache
+
+author:
+  name: Trevor Lauder
+  avatar: /assets/images/authorimage.webp
+  links:
+    - label: Website
+      icon: fas fa-fw fa-link
+      url: https://www.lauder.family
+    - label: GitHub
+      icon: fab fa-fw fa-github
+      url: https://github.com/trevorlauder
+    - label: LinkedIn
+      icon: fab fa-fw fa-linkedin
+      url: https://www.linkedin.com/in/trevor-lauder
+
+social:
+  links:
+    - https://www.lauder.family/trevor/
+    - https://github.com/trevorlauder
+    - https://www.linkedin.com/in/trevor-lauder
+
+analytics:
+  provider: google-gtag
+  google:
+    tracking_id: G-1F9WKFBP24
+
+footer:
+  links:
+    - label: GitHub
+      icon: fab fa-fw fa-github
+      url: https://github.com/trevorlauder
+    - label: LinkedIn
+      icon: fab fa-fw fa-linkedin
+      url: https://www.linkedin.com/in/trevor-lauder
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+      show_date: true
+  - scope:
+      path: _pages
+      type: pages
+    values:
+      layout: single
+      author_profile: true
+
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
+
+comments:
+  provider: giscus
+  giscus:
+    repo_id: R_kgDOGHVgxQ
+    category_name: Announcements
+    category_id: DIC_kwDOGHVgxc4CSXKv
+    discussion_term: pathname
+    reactions_enabled: 1
+    theme: preferred_color_scheme
+
+facebook:
+  app_id: 856768292162027
