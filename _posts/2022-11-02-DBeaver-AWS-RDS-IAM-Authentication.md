@@ -31,7 +31,7 @@ You need to install the [AWS JDBC Driver for MySQL](https://github.com/awslabs/a
   - **URL Template**: jdbc:mysql:aws://{host}:{port}
   - **Default Port**: 3306
 
-  ![MySQL-Driver-Settings](/trevor/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/MySQL-Driver-Settings.webp)
+  ![MySQL-Driver-Settings](/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/MySQL-Driver-Settings.webp)
 
 - Click on the `Libraries` tab -> `Add Artifact` and paste in the following:
 
@@ -66,7 +66,7 @@ You need to install the [AWS JDBC Driver](https://github.com/awslabs/aws-advance
   - **URL Template**: jdbc:aws-wrapper:postgresql://{host}:{port}/{database}
   - **Default Port**: 5432
 
-  ![PostgreSQL-Driver-Settings](/trevor/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/PostgreSQL-Driver-Settings.webp)
+  ![PostgreSQL-Driver-Settings](/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/PostgreSQL-Driver-Settings.webp)
 
 - Click on the `Libraries` tab -> `Add Artifact` and paste in the following:
 
@@ -105,10 +105,10 @@ You need to install the [AWS JDBC Driver](https://github.com/awslabs/aws-advance
 - Add a New Database Connection and use `AWS JDBC Driver for MySQL` or `AWS JDBC Driver for PostgreSQL` as the driver
 - For MySQL: Click on the `Driver properties` tab, scroll down to `useAwsIam` and set it to `true`
 
-  ![MySQL-Driver-Properties](/trevor/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/MySQL-Driver-Properties.webp)
+  ![MySQL-Driver-Properties](/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/MySQL-Driver-Properties.webp)
 - For PostgreSQL: Click on the `Driver properties` tab, set `wrapperPlugins` to `iam`
 
-  ![PostgreSQL-Driver-Properties](/trevor/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/PostgreSQL-Driver-Properties.webp)
+  ![PostgreSQL-Driver-Properties](/assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/PostgreSQL-Driver-Properties.webp)
 - Enter your DB connection details in the `Main` tab
   - Use your database username, [that was configured to use IAM auth](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html), and leave the password field blank
 - Click `Test Connection` and it should connect and authenticate to your RDS database

@@ -16,7 +16,7 @@ contact_page_description: Have any questions about the content on this page?  Yo
 thankyou_page_description: Your message has been successfully sent.
 
 markdown: kramdown
-remote_theme: mmistakes/minimal-mistakes@4.24.0
+remote_theme: mmistakes/minimal-mistakes@4.26.2
 
 permalink: pretty
 paginate: 5
