@@ -1,17 +1,13 @@
 source "https://rubygems.org"
 
-gem "github-pages", group: :jekyll_plugins
-gem "tzinfo-data"
+gem "jekyll", "~> 4.4"
+gem "minimal-mistakes-jekyll", "~> 4.27"
 
-# If you have any plugins, put them here!
-group :jekyll_plugins do
-  gem "jekyll-paginate"
-  gem "jekyll-sitemap"
-  gem "jekyll-gist"
-  gem "jekyll-feed"
-  gem "jemoji"
-  gem "jekyll-include-cache"
-  gem "jekyll-algolia"
-end
-
-gem "webrick"
+gem "jekyll-paginate"
+gem "jekyll-gist"
+gem "jemoji"
+gem "jekyll-sitemap"
+gem "jekyll-seo-tag"
+gem "jekyll-feed"
+gem "jekyll-include-cache"
+gem "jekyll-archives"

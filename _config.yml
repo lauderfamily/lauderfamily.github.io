@@ -16,7 +16,7 @@ contact_page_description: Have any questions about the content on this page?  Yo
 thankyou_page_description: Your message has been successfully sent.
 
 markdown: kramdown
-remote_theme: mmistakes/minimal-mistakes@4.27.0
+theme: minimal-mistakes-jekyll
 
 permalink: pretty
 paginate: 5
@@ -60,6 +60,7 @@ analytics:
     tracking_id: G-1F9WKFBP24
 
 footer:
+  since: 2021
   links:
     - label: GitHub
       icon: fab fa-fw fa-github
