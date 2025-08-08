@@ -19,9 +19,6 @@ Recently the school board started blocking NextDNS, which essentially broke all 
 
 To get around the restrictions, I spun up a [Cloudflare Worker](https://workers.cloudflare.com) that reverse-proxies connections to NextDNS. Now their devices point to that worker over TLS 1.3. Problem solved!
 
-I understand the reason for blocking DoH on the high school WiFi. However, the DNS filtering I have in place is much more restrictive than the schools. I also prefer our family's DNS queries to be encrypted to limit snooping by ISP's and other organizations. I neither need nor desire another organization to monitor my kids' web browsing.  I do that myself.
-
-
 ```javascript
 addEventListener("fetch", event => {
   event.respondWith(handleRequest(event.request))
