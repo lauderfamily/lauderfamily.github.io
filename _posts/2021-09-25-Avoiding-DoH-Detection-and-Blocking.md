@@ -3,7 +3,7 @@ title: Avoiding DNS over HTTPS Detection and Blocking
 categories:
   - Blog
 tags:
-  - Javascript
+  - JavaScript
   - Personal Projects
   - Cloudflare Workers
   - DNS over HTTPS (DoH)
@@ -11,6 +11,10 @@ tags:
 description: How to avoid DNS over HTTPS detection and blocking
 header:
   teaser: /assets/images/teasers/doh-avoidance.svg
+image:
+  path: /assets/images/teasers/doh-avoidance.png
+  width: 1200
+  height: 630
 ---
 
 All of our devices use _DNS over HTTPS_ (DoH). Our kids have supervised iPhones which prevent the DoH profile from being removed, and they don't have root access on their laptops (Chromebooks w/ Ubuntu) which means they can't change the system DoH settings.

@@ -16,6 +16,10 @@ tags:
 description: A follow-up to my 2021 DoH post—now proxy to multiple providers in parallel, combine their filtering, and ship logs to Grafana Loki. Includes one‑click deploy and a simple config.
 header:
   teaser: /assets/images/teasers/doh-avoidance.svg
+image:
+  path: /assets/images/teasers/doh-avoidance.png
+  width: 1200
+  height: 630
 ---
 
 Back in 2021 I wrote about keeping our family’s devices on DNS over HTTPS even when networks tried to block it. That stopgap proxied to a single provider. This follow-up takes the idea further: a Cloudflare Worker that can fan out DoH requests to multiple providers in parallel, combine their filtering decisions, and optionally send structured logs to Grafana Loki—complete with a 1‑click deploy.

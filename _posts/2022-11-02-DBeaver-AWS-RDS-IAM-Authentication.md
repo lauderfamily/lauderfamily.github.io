@@ -4,8 +4,6 @@ categories:
   - Blog
 tags:
   - DBeaver
-  - DBeaver Community Edition
-  - DBeaver CE
   - AWS
   - RDS
   - IAM
@@ -14,11 +12,11 @@ tags:
   - PostgreSQL
 description: How to use DBeaver Community Edition (CE) with RDS IAM authentication
 header:
-  teaser: /assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/MySQL-Driver-Settings.webp
+  teaser: /assets/images/teasers/dbeaver-rds-iam.svg
 image:
-  path: /assets/images/og.webp
-  width: 459
-  height: 200
+  path: /assets/images/teasers/dbeaver-rds-iam.png
+  width: 1200
+  height: 630
 ---
 While DBeaver Professional has IAM authentication support out of the box.  This post describes how you can accompish the same thing while using DBeaver CE.
 

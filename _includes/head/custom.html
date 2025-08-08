@@ -1,2 +1,53 @@
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3406881615771276"
-    crossorigin="anonymous"></script>
+{% if site.analytics.provider == "google-gtag" and site.analytics.google and site.analytics.google.tracking_id %}
+<script>
+    (function () {
+        var dnt = (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.msDoNotTrack === '1');
+        var MID = '{{ site.analytics.google.tracking_id | escape }}';
+
+        // If user has Do Not Track enabled, disable GA4 hits entirely for this property
+        if (dnt) {
+            window['ga-disable-' + MID] = true;
+        }
+
+        function applyGtagEnhancements() {
+            if (typeof window.gtag !== 'function') return false;
+
+                    // Consent Mode defaults (v2): keep ads off by default; keep analytics off until user accepts
+            window.gtag('consent', 'default', {
+                ad_storage: 'denied',
+                        analytics_storage: 'denied',
+                functionality_storage: 'granted',
+                security_storage: 'granted',
+                // Optional parameters
+                wait_for_update: 500
+            });
+
+            // Privacy-friendly flags
+            window.gtag('set', 'ads_data_redaction', true);
+            window.gtag('set', 'url_passthrough', false);
+            window.gtag('set', 'allow_google_signals', false);
+
+            return true;
+        }
+
+        // Run now or retry briefly until gtag is present
+        if (!applyGtagEnhancements()) {
+            var tries = 0;
+            var timer = setInterval(function () {
+                tries++;
+                if (applyGtagEnhancements() || tries > 20) clearInterval(timer);
+            }, 150);
+        }
+    })();
+</script>
+{% endif %}
+
+<!-- Favicons: light/dark SVG with fallbacks and Safari mask icon -->
+<link rel="icon" type="image/svg+xml" href="/assets/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="/assets/images/favicon-light.svg" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/assets/images/favicon.ico" sizes="any">
+<link rel="mask-icon" href="/assets/images/safari-pinned-tab.svg" color="#00E0FF">
+
+<!-- Optional: theme-color for light/dark address bars -->
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0B0D0F">

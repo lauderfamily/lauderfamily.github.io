@@ -8,7 +8,7 @@ url: https://www.lauder.family
 baseurl: /
 repository: lauderfamily/lauderfamily.github.io
 og_image: /assets/images/og.webp
-teaser: /assets/images/og.webp
+teaser: /assets/images/teasers/default.svg
 
 formspree: mbjqwvgk
 contact_page_description: Have any questions about the content on this page?  You are welcome to contact me using the form below!
@@ -23,6 +23,12 @@ timezone: Canada/Mountain
 pagination:
   enabled: true
 
+exclude:
+  - node_modules
+  - scripts
+  - package.json
+  - package-lock.json
+
 include:
   - _pages
 
@@ -33,6 +39,7 @@ plugins:
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
+  - jekyll-seo-tag
 
 author:
   name: Trevor Lauder
