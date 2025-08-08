@@ -33,4 +33,4 @@ Back in 2021 I wrote about keeping our family’s devices on DNS over HTTPS even
 - One‑click Deploy to Cloudflare: Spin it up fast, then tweak `wrangler.toml` and `src/config.js`.
 - Local/dev via Docker + workerd: Run it locally if you want.
 
-Looking to try it? See the README for setup, configuration, deploy, and Docker/workerd usage: [https://github.com/trevorlauder/cloudflare-doh-worker](https://github.com/trevorlauder/cloudflare-doh-worker)
+Looking to try it? See the [README](https://github.com/trevorlauder/cloudflare-doh-worker) for setup, configuration, deploy, and Docker/workerd usage.
