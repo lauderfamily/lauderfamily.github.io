@@ -38,9 +38,6 @@ author:
   name: Trevor Lauder
   avatar: /assets/images/authorimage.webp
   links:
-    - label: Website
-      icon: fas fa-fw fa-link
-      url: https://www.lauder.family
     - label: GitHub
       icon: fab fa-fw fa-github
       url: https://github.com/trevorlauder
@@ -50,7 +47,6 @@ author:
 
 social:
   links:
-    - https://www.lauder.family
     - https://github.com/trevorlauder
     - https://www.linkedin.com/in/trevor-lauder
 
