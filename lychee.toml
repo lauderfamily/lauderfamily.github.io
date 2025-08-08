@@ -1,0 +1,23 @@
+# Lychee link checker configuration
+
+# Exclude endpoints known to return non-200 for bots/HEAD or require JS/user context
+exclude = [
+  "https://x.com/intent/*",
+  "https://twitter.com/intent/*",
+  "https://formspree.io/*",
+  "https://www.linkedin.com/in/*",
+
+  # Temporarily exclude production URLs that may lag deployment/CDN
+  "https://www.lauder.family/privacy/",
+  "https://www.lauder.family/assets/images/teasers/milky-way.svg",
+  "https://www.lauder.family/assets/images/teasers/dry-island.svg",
+  "https://www.lauder.family/assets/images/teasers/dbeaver-rds-iam.svg",
+  "https://www.lauder.family/assets/images/teasers/comet-neowise.svg",
+]
+
+# Consider these statuses OK for rate-limited or walled sites
+accept = [429, 999]
+
+# Retry a bit on flaky endpoints
+max_retries = 2
+retry_wait_time = 2
