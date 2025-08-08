@@ -7,12 +7,16 @@ tags:
   - Landscape
   - Nature
   - Dry Island Buffalo Jump Provincial Park
-  - NIKON D750
-  - Nikon AF-S Nikkor 20mm f/1.8G ED
-  - Nikon AF-S Nikkor 50mm f/1.8G
+  - Nikon D750
+  - Nikon AF-S NIKKOR 20mm f/1.8G ED
+  - Nikon AF-S NIKKOR 50mm f/1.8G
 description: Photos taken at Dry Island Buffalo Jump Provincial Park
 header:
-  teaser: /assets/photos/thumbnails/DSC_6181.jpg.webp
+  teaser: /assets/images/teasers/dry-island.svg
+image:
+  path: /assets/images/teasers/dry-island.png
+  width: 1200
+  height: 630
 gallery:
   - url: /assets/photos/DSC_6181.webp
     image_path: /assets/photos/thumbnails/DSC_6181.jpg.webp

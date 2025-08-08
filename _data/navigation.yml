@@ -9,3 +9,7 @@ main:
     url: /about/
   - title: Contact
     url: /contact/
+  - title: Subscribe
+    url: /feed.xml
+  - title: Privacy
+    url: /privacy/
