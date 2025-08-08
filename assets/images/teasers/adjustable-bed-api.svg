@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title>Adjustable Bed API teaser</title>
+  <desc>Abstract bed icon with wireless signal and title text</desc>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0E1418"/>
+
+  <!-- Accent grid lines (subtle) -->
+  <g opacity="0.08" stroke="#E3E7EA">
+    <path d="M0 90 H1200M0 180 H1200M0 270 H1200M0 360 H1200M0 450 H1200M0 540 H1200"/>
+    <path d="M100 0 V630M250 0 V630M400 0 V630M550 0 V630M700 0 V630M850 0 V630M1000 0 V630"/>
+  </g>
+
+  <!-- Title -->
+  <text x="100" y="150" fill="#E3E7EA" font-size="64" font-weight="700" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">Adjustable Bed API</text>
+
+  <!-- Bed icon -->
+  <!-- Bed base -->
+  <rect x="250" y="390" width="700" height="90" rx="10" fill="#1F5F8B"/>
+  <!-- Mattress (angled adjustable head) -->
+  <path d="M270 420 L620 420 L700 390 L920 390 L920 450 L270 450 Z" fill="#173F5E"/>
+  <!-- Headboard -->
+  <rect x="240" y="330" width="130" height="60" rx="6" fill="#1B2227" stroke="#1F5F8B" stroke-width="4"/>
+  <!-- Pillow -->
+  <rect x="620" y="395" width="80" height="30" rx="12" fill="#FFB07C"/>
+
+  <!-- WiFi / API signal -->
+  <g transform="translate(960,260)" fill="none" stroke="#FFB07C" stroke-width="8" stroke-linecap="round">
+    <path d="M0 0 A120 120 0 0 1 -170 0"/>
+    <path d="M-10 40 A90 90 0 0 1 -160 40"/>
+    <path d="M-20 80 A60 60 0 0 1 -150 80"/>
+  </g>
+  <!-- Small API node dots -->
+  <circle cx="940" cy="250" r="6" fill="#FFB07C"/>
+  <circle cx="905" cy="260" r="6" fill="#FFB07C"/>
+  <circle cx="875" cy="275" r="6" fill="#FFB07C"/>
+
+  <!-- Footer stripe -->
+  <rect x="0" y="600" width="1200" height="30" fill="#1F5F8B" opacity="0.6"/>
+</svg>

@@ -11,6 +11,8 @@ tags:
   - Nikon AF-S Nikkor 20mm f/1.8G ED
   - Nikon AF-S Nikkor 50mm f/1.8G
 description: Photos taken at Dry Island Buffalo Jump Provincial Park
+header:
+  teaser: /assets/photos/thumbnails/DSC_6181.jpg.webp
 gallery:
   - url: /assets/photos/DSC_6181.webp
     image_path: /assets/photos/thumbnails/DSC_6181.jpg.webp

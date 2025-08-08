@@ -9,6 +9,8 @@ tags:
   - DNS over HTTPS (DoH)
   - NextDNS
 description: How to avoid DNS over HTTPS detection and blocking
+header:
+  teaser: /assets/images/teasers/doh-avoidance.svg
 ---
 
 All of our devices use _DNS over HTTPS_ (DoH). Our kids have supervised iPhones which prevent the DoH profile from being removed, and they don't have root access on their laptops (Chromebooks w/ Ubuntu) which means they can't change the system DoH settings.
