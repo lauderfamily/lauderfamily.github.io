@@ -13,6 +13,8 @@ tags:
   - MySQL
   - PostgreSQL
 description: How to use DBeaver Community Edition (CE) with RDS IAM authentication
+header:
+  teaser: /assets/images/2022-11-02-DBeaver-AWS-RDS-IAM-Authentication/MySQL-Driver-Settings.webp
 image:
   path: /assets/images/og.webp
   width: 459

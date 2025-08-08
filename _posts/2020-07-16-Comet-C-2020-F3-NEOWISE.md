@@ -10,6 +10,8 @@ tags:
   - Olympus M.Zuiko Digital ED 40-150mm f/2.8 Pro
   - Olympus M.Zuiko Digital MC-14 1.4x Teleconverter
 description: Photos of Comet C/2020 F3 (NEOWISE)
+header:
+  teaser: /assets/photos/thumbnails/DSC_5856.jpg.webp
 gallery:
   - url: /assets/photos/DSC_5856.webp
     image_path: /assets/photos/thumbnails/DSC_5856.jpg.webp

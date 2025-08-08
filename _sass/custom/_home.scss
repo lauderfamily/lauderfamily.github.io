@@ -1,0 +1,66 @@
+// Home page tweaks
+// Center hero text and entire splash page content
+.layout--splash .page__hero--overlay .wrapper {
+  text-align: center;
+}
+
+/* Left-align only the hero title on the splash (keep lead/buttons centered) */
+.layout--splash .page__hero--overlay .page__title {
+  text-align: left;
+}
+
+/* Left-align the hero excerpt/lead under the title */
+.layout--splash .page__hero--overlay .page__lead {
+  text-align: left;
+}
+
+.layout--splash .page__hero--overlay {
+  /* Show the entire overlay image without cropping */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Match the new thin SVG ratio (2400x450 => 8:1.5) */
+  aspect-ratio: 8 / 1.5;
+  /* Remove default vertical padding so aspect-ratio controls height */
+  padding: 0;
+}
+
+/* Restore comfortable spacing for the overlay text */
+.layout--splash .page__hero--overlay .wrapper {
+  padding-block: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.layout--splash .page__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // horizontally center children
+  text-align: center;  // center inline content (e.g., paragraphs)
+}
+
+// Center the gallery on the splash index
+.layout--splash .page__content > figure.full {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-left: 0 !important; // override theme's negative gutter
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center; // fallback centering for inline-block children
+}
+
+.layout--splash .page__content > figure.full a {
+  display: inline-block;
+  margin: 0 !important; // remove left-gutter margins from theme grid
+  float: none !important; // ensure flex layout takes effect
+  width: auto !important; // drop fixed column widths from theme grid
+  flex: 0 0 auto; // size to content, allow wrapping
+}
+
+// Make thumbnails a consistent, responsive width so centering is noticeable
+.layout--splash .page__content > figure.full img {
+  display: block;
+  width: clamp(160px, 28vw, 280px);
+  height: auto;
+}

@@ -7,6 +7,8 @@ tags:
   - Personal Projects
   - Reverse-Engineering
 description: Reverse-engineered adjustable bed API
+header:
+  teaser: /assets/images/teasers/adjustable-bed-api.svg
 ---
 
 What does a Site Reliability Engineer do for fun, you ask? We code and automate everything at work, so why not do it at home too!  It's one of the main reasons I insist on having everything I can on WiFi.

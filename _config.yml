@@ -1,13 +1,12 @@
 title: Trevor Lauder
 masthead_title: Everything SRE, DevOps, Code and Photography
 description: Everything SRE, DevOps, Code and Photography
-minimal_mistakes_skin: default
+minimal_mistakes_skin: custom
 search: true
 favicon: /assets/images/favicon.ico
 url: https://www.lauder.family
 baseurl: /
 repository: lauderfamily/lauderfamily.github.io
-logo: /assets/images/site-logo.webp
 og_image: /assets/images/og.webp
 teaser: /assets/images/og.webp
 
@@ -19,15 +18,17 @@ markdown: kramdown
 theme: minimal-mistakes-jekyll
 
 permalink: pretty
-paginate: 5
-paginate_path: /page:num/
 timezone: Canada/Mountain
+
+# jekyll-paginate-v2 global enable
+pagination:
+  enabled: true
 
 include:
   - _pages
 
 plugins:
-  - jekyll-paginate
+  - jekyll-paginate-v2
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
