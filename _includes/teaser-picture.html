@@ -82,6 +82,9 @@ Notes:
   {%- elsif fallback_svg_file -%}
     <img class="{{ include.class | default: 'teaser-img' }}" src="{{ teaser_path }}{{ base }}.svg" alt="{{ alt_text | escape }}">
   {%- else -%}
-    <!-- No fallback image found -->
+    <img class="{{ include.class | default: 'teaser-img' }} teaser-img--missing"
+         src="https://via.placeholder.com/1200x630?text=No+Image"
+         alt="No image available for '{{ alt_text | escape }}'">
+    <noscript><div class="teaser-img-missing-msg">No image available for '{{ alt_text | escape }}'</div></noscript>
   {%- endif -%}
 {%- endif -%}
