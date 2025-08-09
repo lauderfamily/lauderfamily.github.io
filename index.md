@@ -129,21 +129,33 @@ intro:
     // Then do a subtle fade in (opacity already set to 1 by instantSet)
     requestAnimationFrame(function(){ fadeIn(el); });
 
-    // Guard against later DOM mutations resetting the text
+    // Guard against later scripts resetting the text (longer window)
     try {
-      var attempts = 0;
-      var observer = new MutationObserver(function(){
-        attempts++;
+      var endTime = Date.now() + 15000; // observe up to 15s
+      var lastMismatch = Date.now();
+      function enforce(){
         if(el.textContent.trim() !== desired) {
           el.textContent = desired;
+          lastMismatch = Date.now();
         }
-        // Stop observing after a few stabilizations or 3s
-        if(attempts > 10) {
+      }
+      var observer = new MutationObserver(function(){
+        enforce();
+        // If stable (no mismatches) for >2500ms and past 2s initial period, stop
+        if(Date.now() - lastMismatch > 2500 && Date.now() > (endTime - 13000)) {
+          observer.disconnect();
+        }
+        if(Date.now() > endTime) {
           observer.disconnect();
         }
       });
-      observer.observe(el, { childList: true, characterData: true, subtree: true });
-      setTimeout(function(){ observer.disconnect(); }, 3000);
+      // Observe parent to catch full replacements
+      var targetParent = el.parentNode || document.body;
+      observer.observe(targetParent, { childList: true, characterData: true, subtree: true });
+      // Visibility change (e.g., refresh via bfcache restore)
+      document.addEventListener('visibilitychange', function(){ if(!document.hidden) enforce(); }, { once: false });
+      // Final enforcement after load
+      window.addEventListener('load', function(){ setTimeout(enforce, 100); setTimeout(enforce, 500); });
     } catch(e) { /* ignore */ }
   }
 
