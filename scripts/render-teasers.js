@@ -48,9 +48,18 @@ const thumbSize = parseInt(process.env.THUMBS || '300', 10);
 const force = !!process.env.FORCE;
 const background = parseColor(process.env.BACKGROUND || '#0b0d0f');
 
-function parseColor(input){
-  if(/^#?[0-9a-fA-F]{6}$/.test(input)){ const hex = input.replace('#',''); return { r: parseInt(hex.slice(0,2),16), g: parseInt(hex.slice(2,4),16), b: parseInt(hex.slice(4,6),16), alpha:1 }; }
-  return { r:11,g:13,b:15,alpha:1 }; // fallback
+function parseColor(input) {
+  if (/^#?[0-9a-fA-F]{6}$/.test(input)) {
+    const hex = input.replace('#', '');
+    return {
+      r: parseInt(hex.slice(0, 2), 16),
+      g: parseInt(hex.slice(2, 4), 16),
+      b: parseInt(hex.slice(4, 6), 16),
+      alpha: 1
+    };
+  }
+  // fallback
+  return { r: 11, g: 13, b: 15, alpha: 1 };
 }
 
 function isNewer(src, dest){
