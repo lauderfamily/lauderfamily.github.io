@@ -17,7 +17,7 @@ exclude = [
 ]
 
 # Consider these statuses OK for rate-limited or walled sites
-accept = [429, 999]
+accept = [200, 429, 999]
 
 # Retry a bit on flaky endpoints
 max_retries = 2
