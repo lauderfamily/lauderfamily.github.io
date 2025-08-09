@@ -4,7 +4,12 @@
   "private": true,
   "description": "Build tools for generating assets for the Jekyll site",
   "scripts": {
-    "render:teasers": "node scripts/render-teasers.js"
+    "render:teasers": "node scripts/render-teasers.js",
+    "ruby:version": "cat .ruby-version",
+    "ruby:install": "bash scripts/ruby-ensure.sh install-only",
+    "ruby:ensure": "bash scripts/ruby-ensure.sh",
+    "ruby:use": "bash scripts/ruby-ensure.sh use",
+    "ruby:bundle": "bash scripts/ruby-ensure.sh bundle"
   },
   "dependencies": {
     "sharp": "*",
