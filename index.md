@@ -81,17 +81,63 @@ intro:
   }
 
   function dailyIndex(len){
-    var now = new Date();
-    // Simple deterministic mix of year and day-of-year
-    var idx = (dayOfYear(now) + now.getFullYear()) % len;
+    // Anchor calculation to Mountain Time (America/Denver) for consistent rollover
+    var mtNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }));
+    var idx = (dayOfYear(mtNow) + mtNow.getFullYear()) % len;
     return idx;
   }
 
   function setDailyTagline(){
     var el = document.querySelector('.page__lead');
     if(!el) return;
-  var chosen = taglines[dailyIndex(taglines.length)];
-    el.textContent = chosen;
+
+    // Prepare fade transition class
+    if(!el.classList.contains('tagline-fade-transition')) {
+      el.classList.add('tagline-fade-transition');
+    }
+
+    var todayIdx = dailyIndex(taglines.length);
+    var computed = taglines[todayIdx];
+
+    // Mountain Time date key
+    var mtNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }));
+    var dateKey = mtNow.getFullYear()+'-'+String(mtNow.getMonth()+1).padStart(2,'0')+'-'+String(mtNow.getDate()).padStart(2,'0');
+    var LS_KEY_DATE = 'dailyTaglineDate';
+    var LS_KEY_TEXT = 'dailyTaglineText';
+    try {
+      var storedDate = localStorage.getItem(LS_KEY_DATE);
+      var storedText = localStorage.getItem(LS_KEY_TEXT);
+      if(storedDate === dateKey && storedText) {
+        // Use cached text if still in list; else fall back to computed
+        if(taglines.indexOf(storedText) !== -1) {
+          if(el.textContent.trim() !== storedText) {
+            fadeSwap(el, storedText);
+          }
+          return; // Done for today
+        }
+      }
+      // Store today's choice
+      localStorage.setItem(LS_KEY_DATE, dateKey);
+      localStorage.setItem(LS_KEY_TEXT, computed);
+    } catch(e) { /* Ignore storage errors (private mode, etc.) */ }
+
+    if(el.textContent.trim() !== computed) {
+      fadeSwap(el, computed);
+    }
+  }
+
+  function fadeSwap(el, text){
+    // Avoid layout shift: keep current height by setting explicit min-height once
+    if(!el.style.minHeight) {
+      el.style.minHeight = el.offsetHeight + 'px';
+    }
+    el.style.opacity = 0;
+    requestAnimationFrame(function(){
+      setTimeout(function(){
+        el.textContent = text;
+        el.style.opacity = 1;
+      }, 160); // allow fade out start
+    });
   }
 
   if(document.readyState === 'loading') {
@@ -101,4 +147,7 @@ intro:
   }
 })();
 </script>
+<style>
+.tagline-fade-transition { transition: opacity .6s ease; }
+</style>
 <noscript><style>.page__lead-noscript{display:block;font-style:italic;opacity:.85;margin-top:.5rem}</style><span class="page__lead-noscript">(Static tagline shown – enable JavaScript for daily variation)</span></noscript>
