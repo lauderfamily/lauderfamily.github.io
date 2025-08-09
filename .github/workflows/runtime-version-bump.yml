@@ -19,16 +19,33 @@ jobs:
       - name: Determine latest Ruby (minor+patch within current major)
         id: ruby
         run: |
-          current=$(cat .ruby-version | tr -d ' ')
-          major_minor=${current%.*}
-          latest=$(curl -s https://cache.ruby-lang.org/pub/ruby/index.txt | awk '{print $1}' | grep "^${major_minor}\." | sort -V | tail -1 || true)
-          # Fallback logic: ensure latest matches semver-like pattern
-          if ! echo "$latest" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
-            latest=$current
-          fi
-          if [ -z "$current" ] || ! echo "$current" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
-            echo "ERROR: .ruby-version current value invalid or empty ($current)" >&2
+          set -euo pipefail
+          current=$(tr -d '\r\n\t ' < .ruby-version)
+          # Accept forms like 3.4.1; reject non-stable (preview, rc)
+          if ! echo "$current" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "ERROR: .ruby-version current value invalid or not stable ($current)" >&2
             exit 1
+          fi
+          major_minor=$(echo "$current" | cut -d. -f1-2)
+          echo "Detected current Ruby version: $current (series $major_minor.x)"
+          # Use authoritative releases list from ruby-lang.org repo.
+          releases_yaml_url="https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
+          tmpfile=$(mktemp)
+          if curl -fsSL "$releases_yaml_url" -o "$tmpfile"; then
+            latest=$(awk -v mm="$major_minor" '/^- version:/ {gsub("- version: ","",$0); v=$0; if (v ~ "^"mm"\\.") print v}' "$tmpfile" | sort -V | tail -1)
+          else
+            echo "WARNING: Failed to fetch releases.yml; falling back to current" >&2
+            latest="$current"
+          fi
+          rm -f "$tmpfile"
+          if ! echo "$latest" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "WARNING: Parsed latest Ruby version invalid ($latest); using current" >&2
+            latest="$current"
+          fi
+          if [ "$latest" != "$current" ]; then
+            echo "Ruby update available: $current -> $latest"
+          else
+            echo "Ruby already up to date at $current"
           fi
           echo "current=$current" >> $GITHUB_OUTPUT
           echo "latest=$latest" >> $GITHUB_OUTPUT
@@ -52,20 +69,38 @@ jobs:
             exit 0
           fi
           current=$(cat .nvmrc | tr -d ' ')
-          major=$(echo "$current" | cut -d. -f1)
+          # Capture whether original had a leading v
+          if echo "$current" | grep -q '^[vV]'; then
+            had_prefix=true
+            current_no_prefix=${current#v}
+          else
+            had_prefix=false
+            current_no_prefix=$current
+          fi
+          major=$(echo "$current_no_prefix" | cut -d. -f1)
           latest=$(curl -fsSL https://nodejs.org/dist/index.json | jq -r \
             --arg major "$major" '[.[] | select(.version | test("^v"+$major+"\\.")) | select(.lts)] | map(.version) | sort_by(sub("^v"; "")) | last' || true)
-          latest=${latest#v}
+          # latest may already have leading v (e.g. v24.5.0). Normalize to no prefix for validation, keep raw for potential write.
+          latest_no_prefix=${latest#v}
           # Validate versions
-          if ! echo "$current" | grep -Eq '^[vV]?[0-9]+\.[0-9]+\.[0-9]+'; then
+          if ! echo "$current_no_prefix" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
             echo "ERROR: .nvmrc current value invalid or empty ($current)" >&2
             exit 1
           fi
-          if ! echo "$latest" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
-            latest=$current
+          if ! echo "$latest_no_prefix" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
+            latest_no_prefix=$current_no_prefix
+            latest=$current  # preserve original
           fi
           echo "current=$current" >> $GITHUB_OUTPUT
-          echo "latest=$latest" >> $GITHUB_OUTPUT
+          echo "latest_no_prefix=$latest_no_prefix" >> $GITHUB_OUTPUT
+          # Decide what to write: preserve original prefix style
+          if [ "$had_prefix" = true ]; then
+            latest_write="v$latest_no_prefix"
+          else
+            latest_write="$latest_no_prefix"
+          fi
+          echo "latest=$latest_write" >> $GITHUB_OUTPUT
+          echo "had_prefix=$had_prefix" >> $GITHUB_OUTPUT
 
       - name: Update .nvmrc if needed
         if: steps.node.outputs.skip != 'true' && steps.node.outputs.latest != steps.node.outputs.current
@@ -74,7 +109,6 @@ jobs:
             echo "Refusing to write empty Node version" >&2
             exit 1
           fi
-            
           echo "${{ steps.node.outputs.latest }}" > .nvmrc
           echo "Bumped .nvmrc to ${{ steps.node.outputs.latest }}" >> "$GITHUB_STEP_SUMMARY"
 
