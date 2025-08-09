@@ -75,9 +75,23 @@ jobs:
             had_prefix=false
             current_no_prefix=$current
           fi
-          # Fetch JSON and choose absolute latest stable (final) release.
+          # Fetch JSON and choose absolute latest stable (final) release using numeric sort (avoid lexicographic mistakes like v9.9.0 > v24.x).
           index_json=$(curl -fsSL https://nodejs.org/dist/index.json || echo '[]')
-          latest=$(echo "$index_json" | jq -r '[.[] | select(.version | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))] | map(.version) | sort_by(sub("^v"; "")) | last')
+          latest=$(echo "$index_json" | jq -r '
+            [ .[] | select(.version | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$")) ]
+            | map(.version)
+            | map({raw: ., parts: (.[1:] | split(".") | map(tonumber))})
+            | sort_by(.parts[0], .parts[1], .parts[2])
+            | (last | .raw)')
+          echo "Top 5 highest Node versions (debug):" >&2
+          echo "$index_json" | jq -r '
+            [ .[] | select(.version | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$")) ]
+            | map(.version)
+            | map({raw: ., parts: (.[1:] | split(".") | map(tonumber))})
+            | sort_by(.parts[0], .parts[1], .parts[2])
+            | reverse
+            | .[0:5]
+            | .[].raw' >&2
           if [ -z "$latest" ] || [ "$latest" = "null" ]; then
             echo "WARNING: Could not determine latest Node version; using current" >&2
             latest=$current
