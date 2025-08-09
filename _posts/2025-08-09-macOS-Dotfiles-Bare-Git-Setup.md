@@ -32,17 +32,14 @@ Benefits:
 Instead of cloning a standard repository directly into `~` (and dealing with a noisy untracked list), I clone it **bare** and configure Git to store objects in `.dotfiles` while treating the home directory as the working tree.
 
 ```sh
-# Alias I use (added to ~/.zshrc early in bootstrap)
 alias dotfiles="/opt/homebrew/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 ```
-
-With the alias defined, any `dotfiles <command>` behaves like a normal Git invocation—only the repository metadata stays hidden in `~/.dotfiles/`.
-
-## Git path notes
 
 The examples below assume Git was installed via Homebrew on Apple Silicon, so the binary lives at `/opt/homebrew/bin/git`.
 
 If your path differs, adjust the path inside the alias definition.
+
+With the alias defined, any `dotfiles <command>` behaves like a normal Git invocation—only the repository metadata stays hidden in `~/.dotfiles/`.
 
 ## Local overrides: `~/.dotfiles-local-settings`
 
