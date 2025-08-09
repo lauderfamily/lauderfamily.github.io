@@ -69,7 +69,7 @@ function isNewer(src, dest){
   return s > d; // regenerate if source newer
 }
 
-async function ensureDir(d){ await fs.promises.mkdir(d,{recursive:true}); }
+async function ensureDir(dirPath){ await fs.promises.mkdir(dirPath,{recursive:true}); }
 
 async function renderVariant(svgBuf, baseOut, width, format, aspect){
   const height = Math.round(width * aspect); // maintain aspect
