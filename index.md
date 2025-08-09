@@ -71,7 +71,7 @@ intro:
 <script>
 // Deterministic daily tagline (client-side) using _data/taglines.json.
 // Runs AFTER window load to avoid production (main.min.js) rewrites.
-// Uses dedicated span + persistent lock attribute.
+// Uses dedicated span; fade removed for simplicity.
 (function() {
   var taglines = {{ site.data.taglines | jsonify }};
   if(!Array.isArray(taglines) || !taglines.length) return; // Safety
@@ -91,16 +91,13 @@ intro:
   function setDailyTagline(){
     var container = document.querySelector('.page__lead');
     if(!container) return;
-    // Ensure dedicated span
+    var initial = container.querySelector('#dynamic-tagline-initial');
+    // Replace initial span with dynamic span only once
     var el = container.querySelector('#dynamic-tagline');
-    if(!el){
+    if(!el) {
       el = document.createElement('span');
       el.id = 'dynamic-tagline';
-      // Preserve any existing text (first load) only until swap
-      container.innerHTML = '<span id="dynamic-tagline" class="tagline-fade-transition"></span>';
-      el = container.querySelector('#dynamic-tagline');
-    } else if(!el.classList.contains('tagline-fade-transition')) {
-      el.classList.add('tagline-fade-transition');
+      if(initial) initial.replaceWith(el); else container.appendChild(el);
     }
 
     var todayIdx = dailyIndex(taglines.length);
@@ -129,10 +126,8 @@ intro:
     } catch(e) { /* Ignore storage errors (private mode, etc.) */ }
 
     var desired = computed;
-    // Apply (opacity 0 then fade to 1) only if different
     if(el.textContent.trim() !== desired) {
-      instantSet(el, desired);
-      requestAnimationFrame(function(){ fadeIn(el); });
+      fadeSwap(el, desired);
     }
 
     // Lightweight polling fallback (covers late hydration scripts)
@@ -148,13 +143,14 @@ intro:
     window.addEventListener('pageshow', function(){ if(el.textContent.trim() !== desired) el.textContent = desired; });
   }
 
-  function instantSet(el, text){
+  function fadeSwap(el, text){
+    // Preserve height to mitigate layout shift
     if(!el.style.minHeight) { el.style.minHeight = el.offsetHeight + 'px'; }
-    el.style.opacity = 0; // start hidden
-    el.textContent = text;
-  }
-  function fadeIn(el){
-    el.style.opacity = 1;
+    el.style.opacity = 0;
+    setTimeout(function(){
+      el.textContent = text;
+      requestAnimationFrame(function(){ el.style.opacity = 1; });
+    }, 120);
   }
 
   function initiate(){

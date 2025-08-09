@@ -37,9 +37,9 @@
       {% endif %}
     </h1>
     {% if page.tagline %}
-      <p class="page__lead">{{ page.tagline | markdownify | remove: "<p>" | remove: "</p>" }}</p>
+      <p class="page__lead"><span id="dynamic-tagline-initial">{{ page.tagline | markdownify | remove: "<p>" | remove: "</p>" }}</span></p>
     {% elsif page.header.show_overlay_excerpt != false and page.excerpt %}
-      <p class="page__lead">{{ page.excerpt | markdownify | remove: "<p>" | remove: "</p>" }}</p>
+      <p class="page__lead"><span id="dynamic-tagline-initial">{{ page.excerpt | markdownify | remove: "<p>" | remove: "</p>" }}</span></p>
     {% endif %}
     {% include page__meta.html %}
     {% if page.header.actions %}
