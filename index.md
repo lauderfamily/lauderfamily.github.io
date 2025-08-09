@@ -70,7 +70,8 @@ intro:
 
 <script>
 // Deterministic daily tagline (client-side) using _data/taglines.json.
-// Fallback: the static front matter 'excerpt' remains for SEO and no-JS.
+// Runs AFTER window load to avoid production (main.min.js) rewrites.
+// Uses dedicated span + persistent lock attribute.
 (function() {
   var taglines = {{ site.data.taglines | jsonify }};
   if(!Array.isArray(taglines) || !taglines.length) return; // Safety
@@ -88,11 +89,17 @@ intro:
   }
 
   function setDailyTagline(){
-    var el = document.querySelector('.page__lead');
-    if(!el) return;
-
-    // Prepare fade transition class
-    if(!el.classList.contains('tagline-fade-transition')) {
+    var container = document.querySelector('.page__lead');
+    if(!container) return;
+    // Ensure dedicated span
+    var el = container.querySelector('#dynamic-tagline');
+    if(!el){
+      el = document.createElement('span');
+      el.id = 'dynamic-tagline';
+      // Preserve any existing text (first load) only until swap
+      container.innerHTML = '<span id="dynamic-tagline" class="tagline-fade-transition"></span>';
+      el = container.querySelector('#dynamic-tagline');
+    } else if(!el.classList.contains('tagline-fade-transition')) {
       el.classList.add('tagline-fade-transition');
     }
 
@@ -122,41 +129,23 @@ intro:
     } catch(e) { /* Ignore storage errors (private mode, etc.) */ }
 
     var desired = computed;
-    // Apply immediately (no wait) to beat any later theme script
+    // Apply (opacity 0 then fade to 1) only if different
     if(el.textContent.trim() !== desired) {
       instantSet(el, desired);
+      requestAnimationFrame(function(){ fadeIn(el); });
     }
-    // Then do a subtle fade in (opacity already set to 1 by instantSet)
-    requestAnimationFrame(function(){ fadeIn(el); });
 
-    // Guard against later scripts resetting the text (longer window)
-    try {
-      var endTime = Date.now() + 15000; // observe up to 15s
-      var lastMismatch = Date.now();
-      function enforce(){
-        if(el.textContent.trim() !== desired) {
-          el.textContent = desired;
-          lastMismatch = Date.now();
-        }
+    // Lightweight polling fallback (covers late hydration scripts)
+    var start = Date.now();
+    var pollInterval = 500; // ms
+    var poller = setInterval(function(){
+      if(Date.now() - start > 15000) { clearInterval(poller); return; }
+      if(el.textContent.trim() !== desired) {
+        el.textContent = desired;
       }
-      var observer = new MutationObserver(function(){
-        enforce();
-        // If stable (no mismatches) for >2500ms and past 2s initial period, stop
-        if(Date.now() - lastMismatch > 2500 && Date.now() > (endTime - 13000)) {
-          observer.disconnect();
-        }
-        if(Date.now() > endTime) {
-          observer.disconnect();
-        }
-      });
-      // Observe parent to catch full replacements
-      var targetParent = el.parentNode || document.body;
-      observer.observe(targetParent, { childList: true, characterData: true, subtree: true });
-      // Visibility change (e.g., refresh via bfcache restore)
-      document.addEventListener('visibilitychange', function(){ if(!document.hidden) enforce(); }, { once: false });
-      // Final enforcement after load
-      window.addEventListener('load', function(){ setTimeout(enforce, 100); setTimeout(enforce, 500); });
-    } catch(e) { /* ignore */ }
+    }, pollInterval);
+    // Also enforce once on page show (back/forward cache)
+    window.addEventListener('pageshow', function(){ if(el.textContent.trim() !== desired) el.textContent = desired; });
   }
 
   function instantSet(el, text){
@@ -168,10 +157,33 @@ intro:
     el.style.opacity = 1;
   }
 
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setDailyTagline);
+  function initiate(){
+    // Delay a tick to allow late theme mutations
+    setTimeout(function(){
+      setDailyTagline();
+      // Short intensive guard phase (first 5s after load)
+      var start = Date.now();
+      var container = document.querySelector('.page__lead');
+      var desired = container && container.querySelector('#dynamic-tagline') && container.querySelector('#dynamic-tagline').textContent.trim();
+      if(!container || !desired) return;
+      function guard(){
+        if(Date.now() - start > 5000) return; // stop after 5s
+        // If something rewrote the container text, rebuild span
+        var span = container.querySelector('#dynamic-tagline');
+        if(!span || span.textContent.trim() !== desired){
+          container.setAttribute('data-dynamic-tagline', 'locked');
+          container.innerHTML = '<span id="dynamic-tagline" class="tagline-fade-transition">'+desired+'</span>';
+        }
+        requestAnimationFrame(guard);
+      }
+      requestAnimationFrame(guard);
+    }, 50);
+  }
+
+  if(document.readyState === 'complete') {
+    initiate();
   } else {
-    setDailyTagline();
+    window.addEventListener('load', initiate, { once: true });
   }
 })();
 </script>
