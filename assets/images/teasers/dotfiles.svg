@@ -62,7 +62,7 @@
     <text x="32" y="176" font-family="'SFMono-Regular', 'Menlo', monospace" font-size="22" fill="#7FCCE5">--git-dir=$HOME/.dotfiles/</text>
     <text x="32" y="212" font-family="'SFMono-Regular', 'Menlo', monospace" font-size="22" fill="#7FCCE5">--work-tree=$HOME</text>
   </g>
-  <text x="150" y="520" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="60" fill="#E6ECF1" font-weight="600">Bare Git dotfiles</text>
+  <text x="150" y="520" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="60" fill="#E6ECF1" font-weight="600">dotfiles</text>
   <text x="150" y="570" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="30" fill="#7F9DBD">Clean $HOME • Reproducible setup • Fast bootstrap</text>
   <rect x="0" y="600" width="1200" height="30" fill="#121417"/>
 </svg>
