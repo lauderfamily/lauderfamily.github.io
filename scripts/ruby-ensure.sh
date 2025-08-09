@@ -31,7 +31,7 @@ fi
 # Always try to source RVM to ensure the shell function is loaded (npm scripts often spawn non-login shells)
 RVM_SCRIPT="$HOME/.rvm/scripts/rvm"
 if [[ -s "$RVM_SCRIPT" ]]; then
-  # shellcheck disable=SC1091
+  # shellcheck disable=SC1090
   source "$RVM_SCRIPT"
 fi
 
@@ -40,6 +40,7 @@ if ! typeset -f rvm >/dev/null 2>&1; then
   if command -v rvm >/dev/null 2>&1; then
     : # executable exists but function not loaded
   else
+    # shellcheck disable=SC2028
     echo "ERROR: RVM not found. Install via: \n  \curl -sSL https://get.rvm.io | bash -s stable" >&2
     exit 1
   fi
