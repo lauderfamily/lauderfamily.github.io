@@ -80,9 +80,9 @@ defaults:
       author_profile: true
       read_time: true
       comments: true
-      share: true
       related: true
       show_date: true
+      classes: wide
   - scope:
       path: _pages
       type: pages
@@ -100,6 +100,7 @@ tag_archive:
 comments:
   provider: giscus
   giscus:
+    repo: lauderfamily/lauderfamily.github.io
     repo_id: R_kgDOGHVffw
     category_name: Announcements
     category_id: DIC_kwDOGHVff84CpXAy
