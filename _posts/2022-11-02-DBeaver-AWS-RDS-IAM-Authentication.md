@@ -13,6 +13,7 @@ tags:
 description: How to use DBeaver Community Edition (CE) with RDS IAM authentication
 header:
   teaser: /assets/images/teasers/dbeaver-rds-iam.svg
+  og_image: /assets/images/teasers/dbeaver-rds-iam.png
 image:
   path: /assets/images/teasers/dbeaver-rds-iam.png
   width: 1200

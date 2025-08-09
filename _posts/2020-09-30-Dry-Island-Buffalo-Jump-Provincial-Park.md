@@ -13,6 +13,7 @@ tags:
 description: Photos taken at Dry Island Buffalo Jump Provincial Park
 header:
   teaser: /assets/images/teasers/dry-island.svg
+  og_image: /assets/images/teasers/dry-island.png
 image:
   path: /assets/images/teasers/dry-island.png
   width: 1200
