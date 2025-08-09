@@ -75,6 +75,44 @@
       ]
     }
   },
+  "dotfiles": {
+    "aspect": 0.525,
+    "png": {
+      "files": [
+        "dotfiles-400.png",
+        "dotfiles-600.png",
+        "dotfiles-800.png",
+        "dotfiles-1200.png"
+      ],
+      "srcset": "dotfiles-400.png 400w, dotfiles-600.png 600w, dotfiles-800.png 800w, dotfiles-1200.png 1200w"
+    },
+    "webp": {
+      "files": [
+        "dotfiles-400.webp",
+        "dotfiles-600.webp",
+        "dotfiles-800.webp",
+        "dotfiles-1200.webp"
+      ],
+      "srcset": "dotfiles-400.webp 400w, dotfiles-600.webp 600w, dotfiles-800.webp 800w, dotfiles-1200.webp 1200w"
+    },
+    "avif": {
+      "files": [
+        "dotfiles-400.avif",
+        "dotfiles-600.avif",
+        "dotfiles-800.avif",
+        "dotfiles-1200.avif"
+      ],
+      "srcset": "dotfiles-400.avif 400w, dotfiles-600.avif 600w, dotfiles-800.avif 800w, dotfiles-1200.avif 1200w"
+    },
+    "thumbnail": {
+      "size": 300,
+      "files": [
+        "thumbnails/dotfiles-thumb-300.png",
+        "thumbnails/dotfiles-thumb-300.webp",
+        "thumbnails/dotfiles-thumb-300.avif"
+      ]
+    }
+  },
   "doh-avoidance": {
     "aspect": 0.525,
     "png": {
