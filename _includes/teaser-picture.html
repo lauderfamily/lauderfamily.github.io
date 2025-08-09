@@ -73,5 +73,15 @@ Notes:
        width="1200" height="630" alt="{{ alt_text | escape }}">
 </picture>
 {%- else -%}
-  <img class="{{ include.class | default: 'teaser-img' }}" src="{{ teaser_path }}{{ base }}.png" alt="{{ alt_text | escape }}">
+  {%- assign fallback_png = teaser_path | append: base | append: '.png' -%}
+  {%- assign fallback_svg = teaser_path | append: base | append: '.svg' -%}
+  {%- assign fallback_png_file = site.static_files | where: 'path', fallback_png | first -%}
+  {%- assign fallback_svg_file = site.static_files | where: 'path', fallback_svg | first -%}
+  {%- if fallback_png_file -%}
+    <img class="{{ include.class | default: 'teaser-img' }}" src="{{ teaser_path }}{{ base }}.png" alt="{{ alt_text | escape }}">
+  {%- elsif fallback_svg_file -%}
+    <img class="{{ include.class | default: 'teaser-img' }}" src="{{ teaser_path }}{{ base }}.svg" alt="{{ alt_text | escape }}">
+  {%- else -%}
+    <!-- No fallback image found -->
+  {%- endif -%}
 {%- endif -%}
