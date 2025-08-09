@@ -15,8 +15,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Determine latest Ruby (minor+patch within current major)
+      - name: Determine latest Ruby (always latest stable)
         id: ruby
         run: |
           set -euo pipefail
@@ -26,18 +25,17 @@ jobs:
             echo "ERROR: .ruby-version current value invalid or not stable ($current)" >&2
             exit 1
           fi
-          major_minor=$(echo "$current" | cut -d. -f1-2)
-          echo "Detected current Ruby version: $current (series $major_minor.x)"
-          # Use authoritative releases list from ruby-lang.org repo.
           releases_yaml_url="https://raw.githubusercontent.com/ruby/www.ruby-lang.org/master/_data/releases.yml"
           tmpfile=$(mktemp)
+          latest=""
           if curl -fsSL "$releases_yaml_url" -o "$tmpfile"; then
-            latest=$(awk -v mm="$major_minor" '/^- version:/ {gsub("- version: ","",$0); v=$0; if (v ~ "^"mm"\\.") print v}' "$tmpfile" | sort -V | tail -1)
+            # Highest stable version overall
+            latest=$(awk '/^- version:/ {gsub("- version: ","",$0); v=$0; if (v ~ /^[0-9]+\.[0-9]+\.[0-9]+$/) print v}' "$tmpfile" | sort -V | tail -1)
           else
             echo "WARNING: Failed to fetch releases.yml; falling back to current" >&2
             latest="$current"
           fi
-          rm -f "$tmpfile"
+          rm -f "$tmpfile" || true
           if ! echo "$latest" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
             echo "WARNING: Parsed latest Ruby version invalid ($latest); using current" >&2
             latest="$current"
@@ -60,7 +58,7 @@ jobs:
           echo "${{ steps.ruby.outputs.latest }}" > .ruby-version
           echo "Bumped .ruby-version to ${{ steps.ruby.outputs.latest }}" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Determine latest Node LTS matching major in .nvmrc
+      - name: Determine latest Node LTS (allow major upgrades)
         id: node
         run: |
           if [ ! -f .nvmrc ]; then
@@ -77,9 +75,9 @@ jobs:
             had_prefix=false
             current_no_prefix=$current
           fi
-          major=$(echo "$current_no_prefix" | cut -d. -f1)
-          latest=$(curl -fsSL https://nodejs.org/dist/index.json | jq -r \
-            --arg major "$major" '[.[] | select(.version | test("^v"+$major+"\\.")) | select(.lts)] | map(.version) | sort_by(sub("^v"; "")) | last' || true)
+          # Fetch JSON and choose latest LTS overall
+          index_json=$(curl -fsSL https://nodejs.org/dist/index.json || echo '[]')
+          latest=$(echo "$index_json" | jq -r '[.[] | select(.lts)] | map(.version) | sort_by(sub("^v"; "")) | last')
           # latest may already have leading v (e.g. v24.5.0). Normalize to no prefix for validation, keep raw for potential write.
           latest_no_prefix=${latest#v}
           # Validate versions
@@ -101,6 +99,11 @@ jobs:
           fi
           echo "latest=$latest_write" >> $GITHUB_OUTPUT
           echo "had_prefix=$had_prefix" >> $GITHUB_OUTPUT
+          if [ "$current" != "$latest_write" ]; then
+            echo "Node update available: $current -> $latest_write"
+          else
+            echo "Node already up to date at $current"
+          fi
 
       - name: Update .nvmrc if needed
         if: steps.node.outputs.skip != 'true' && steps.node.outputs.latest != steps.node.outputs.current
