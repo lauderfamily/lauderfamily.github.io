@@ -63,7 +63,7 @@ function parseColor(input) {
 }
 
 function isNewer(src, dest){
-  if(!fs.existsSync(dest)) return true;
+  if (!fs.existsSync(dest)) return true;
   const s = fs.statSync(src).mtimeMs;
   const d = fs.statSync(dest).mtimeMs;
   return s > d; // regenerate if source newer
