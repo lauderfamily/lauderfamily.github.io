@@ -21,13 +21,25 @@ jobs:
         run: |
           current=$(cat .ruby-version | tr -d ' ')
           major_minor=${current%.*}
-          latest=$(curl -s https://cache.ruby-lang.org/pub/ruby/index.txt | awk '{print $1}' | grep "^${major_minor}\." | sort -V | tail -1 || echo "$current")
+          latest=$(curl -s https://cache.ruby-lang.org/pub/ruby/index.txt | awk '{print $1}' | grep "^${major_minor}\." | sort -V | tail -1 || true)
+          # Fallback logic: ensure latest matches semver-like pattern
+          if ! echo "$latest" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
+            latest=$current
+          fi
+          if [ -z "$current" ] || ! echo "$current" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
+            echo "ERROR: .ruby-version current value invalid or empty ($current)" >&2
+            exit 1
+          fi
           echo "current=$current" >> $GITHUB_OUTPUT
           echo "latest=$latest" >> $GITHUB_OUTPUT
 
       - name: Update .ruby-version if needed
         if: steps.ruby.outputs.latest != steps.ruby.outputs.current
         run: |
+          if [ -z "${{ steps.ruby.outputs.latest }}" ]; then
+            echo "Refusing to write empty Ruby version" >&2
+            exit 1
+          fi
           echo "${{ steps.ruby.outputs.latest }}" > .ruby-version
           echo "Bumped .ruby-version to ${{ steps.ruby.outputs.latest }}" >> "$GITHUB_STEP_SUMMARY"
 
@@ -42,9 +54,14 @@ jobs:
           current=$(cat .nvmrc | tr -d ' ')
           major=$(echo "$current" | cut -d. -f1)
           latest=$(curl -fsSL https://nodejs.org/dist/index.json | jq -r \
-            --arg major "$major" '[.[] | select(.version | test("^v"+$major+"\\.")) | select(.lts)] | map(.version) | sort_by(sub("^v"; "")) | last')
+            --arg major "$major" '[.[] | select(.version | test("^v"+$major+"\\.")) | select(.lts)] | map(.version) | sort_by(sub("^v"; "")) | last' || true)
           latest=${latest#v}
-          if [ -z "$latest" ]; then
+          # Validate versions
+          if ! echo "$current" | grep -Eq '^[vV]?[0-9]+\.[0-9]+\.[0-9]+'; then
+            echo "ERROR: .nvmrc current value invalid or empty ($current)" >&2
+            exit 1
+          fi
+          if ! echo "$latest" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+'; then
             latest=$current
           fi
           echo "current=$current" >> $GITHUB_OUTPUT
@@ -53,6 +70,11 @@ jobs:
       - name: Update .nvmrc if needed
         if: steps.node.outputs.skip != 'true' && steps.node.outputs.latest != steps.node.outputs.current
         run: |
+          if [ -z "${{ steps.node.outputs.latest }}" ]; then
+            echo "Refusing to write empty Node version" >&2
+            exit 1
+          fi
+            
           echo "${{ steps.node.outputs.latest }}" > .nvmrc
           echo "Bumped .nvmrc to ${{ steps.node.outputs.latest }}" >> "$GITHUB_STEP_SUMMARY"
 
