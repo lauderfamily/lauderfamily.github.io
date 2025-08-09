@@ -122,7 +122,18 @@ async function processSvg(svgPath, manifest){
       }
       entry[format].files.push(path.basename(outFile));
     }
-    entry[format].srcset = entry[format].files.map(f=>`${f} ${f.match(/-(\d+)\./)[1]}w`).join(', ');
+    entry[format].srcset = entry[format].files
+      .map(f => {
+        const m = f.match(/-(\d+)\./);
+        if (m && m[1]) {
+          return `${f} ${m[1]}w`;
+        } else {
+          console.warn(`Warning: Could not extract width from filename "${f}"`);
+          return null;
+        }
+      })
+      .filter(Boolean)
+      .join(', ');
   }
 
   for(const format of ['png','webp','avif']){
