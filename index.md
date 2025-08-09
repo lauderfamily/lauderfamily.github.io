@@ -1,11 +1,10 @@
 ---
-title: Trevor Lauder
 layout: splash
 header:
   overlay_color: "#0B0D0F"
   overlay_filter: "rgba(11, 13, 15, 0.42)"
   overlay_image: /assets/images/splash.svg
-excerpt: Everything SRE, DevOps, Code and Photography
+excerpt: Shipping code, chasing light.
 gallery:
   - url: /assets/photos/DSC_6181.webp
     image_path: /assets/photos/thumbnails/DSC_6181.jpg.webp
@@ -68,3 +67,38 @@ intro:
 {% include feature_row id="intro" type="center" %}
 
 {% include gallery class="full" %}
+
+<script>
+// Deterministic daily tagline (client-side) using _data/taglines.json.
+// Fallback: the static front matter 'excerpt' remains for SEO and no-JS.
+(function() {
+  var taglines = {{ site.data.taglines | jsonify }};
+  if(!Array.isArray(taglines) || !taglines.length) return; // Safety
+
+  function dayOfYear(d){
+    var start = new Date(Date.UTC(d.getFullYear(),0,0));
+    return Math.floor((d - start) / 86400000); // 0..365
+  }
+
+  function dailyIndex(len){
+    var now = new Date();
+    // Simple deterministic mix of year and day-of-year
+    var idx = (dayOfYear(now) + now.getFullYear()) % len;
+    return idx;
+  }
+
+  function setDailyTagline(){
+    var el = document.querySelector('.page__lead');
+    if(!el) return;
+  var chosen = taglines[dailyIndex(taglines.length)];
+    el.textContent = chosen;
+  }
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setDailyTagline);
+  } else {
+    setDailyTagline();
+  }
+})();
+</script>
+<noscript><style>.page__lead-noscript{display:block;font-style:italic;opacity:.85;margin-top:.5rem}</style><span class="page__lead-noscript">(Static tagline shown – enable JavaScript for daily variation)</span></noscript>
