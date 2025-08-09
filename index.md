@@ -66,7 +66,7 @@ intro:
 
 {% include feature_row id="intro" type="center" %}
 
-{% include gallery class="full" %}
+{% include gallery class="full masonry" %}
 
 <script>
 // Deterministic daily tagline (client-side) using _data/taglines.json.
