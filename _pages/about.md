@@ -3,7 +3,25 @@ permalink: /about/
 title: About
 ---
 
->Practice the philosophy of continuous improvement. Get a little bit better every single day. <cite>Brian Tracy</cite>
+<blockquote id="about-random-quote">
+	<p></p>
+</blockquote>
+<script>
+	(function(){
+		try {
+			var data = {{ site.data.quotes | jsonify }};
+			if(!Array.isArray(data) || !data.length) return;
+			var idx = Math.floor(Math.random() * data.length);
+			var q = data[idx];
+			if(q && typeof q === 'object' && 'quote' in q) q = q.quote; // backward compatibility
+			if(typeof q !== 'string' || !q.length) return;
+			var el = document.getElementById('about-random-quote');
+			if(!el) return;
+			var hQuote = String(q).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+			el.innerHTML = '<p>'+ hQuote +'</p>';
+		} catch(e) { /* no-op */ }
+	})();
+</script>
 
 **Trevor Lauder** is a seasoned SRE/DevOps Engineer based in Sylvan Lake, Alberta, Canada, with over two decades of experience in designing, implementing, and maintaining reliable, scalable, and efficient systems. Throughout his career, he has held senior technical positions including Systems Administrator, Staff Systems Engineer, Principal Application Operations Engineer, Senior Site Reliability Engineer, and Senior Development Operations Engineer.  
 
