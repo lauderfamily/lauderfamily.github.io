@@ -208,7 +208,7 @@ PLATFORMS
 
 DEPENDENCIES
   faraday-retry
-  jekyll (~> 4.4)
+  jekyll
   jekyll-archives
   jekyll-feed
   jekyll-gist
@@ -217,7 +217,7 @@ DEPENDENCIES
   jekyll-seo-tag
   jekyll-sitemap
   jemoji
-  minimal-mistakes-jekyll (~> 4.27)
+  minimal-mistakes-jekyll
 
 BUNDLED WITH
    2.6.2
