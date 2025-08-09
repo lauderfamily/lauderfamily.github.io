@@ -29,12 +29,46 @@ Notes:
 {%- assign probe = teaser_path | append: base | append: '-400.png' -%}
 {%- assign probe_file = site.static_files | where: 'path', probe | first -%}
 {%- if probe_file -%}
+{%- comment -%} Precompute srcset attributes for avif, webp, and png {%- endcomment -%}
+{%- capture avif_srcset -%}
+  {%- if record and record.avif -%}
+    {%- for f in record.avif.files -%}
+      {{ teaser_path }}{{ f }} {{ f | split: '.' | first | split: '-' | last }}w{%- if forloop.last == false -%}, {% endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for w in widths -%}
+      {{ teaser_path }}{{ base }}-{{ w | strip }}.avif {{ w | strip }}w{%- if forloop.last == false -%}, {% endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- capture webp_srcset -%}
+  {%- if record and record.webp -%}
+    {%- for f in record.webp.files -%}
+      {{ teaser_path }}{{ f }} {{ f | split: '.' | first | split: '-' | last }}w{%- if forloop.last == false -%}, {% endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for w in widths -%}
+      {{ teaser_path }}{{ base }}-{{ w | strip }}.webp {{ w | strip }}w{%- if forloop.last == false -%}, {% endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- capture png_srcset -%}
+  {%- if record and record.png -%}
+    {%- for f in record.png.files -%}
+      {{ teaser_path }}{{ f }} {{ f | split: '.' | first | split: '-' | last }}w{%- if forloop.last == false -%}, {% endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for w in widths -%}
+      {{ teaser_path }}{{ base }}-{{ w | strip }}.png {{ w | strip }}w{%- if forloop.last == false -%}, {% endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
 <picture class="{{ include.class | default: 'teaser-img' }}">
-  <source type="image/avif" srcset="{%- if record and record.avif -%}{%- for f in record.avif.files -%}{{ teaser_path }}{{ f }} {{ f | split: '.' | first | split: '-' | last }}w{%- if forloop.last == false -%}, {% endif %}{%- endfor -%}{%- else -%}{%- for w in widths -%}{{ teaser_path }}{{ base }}-{{ w | strip }}.avif {{ w | strip }}w{%- if forloop.last == false -%}, {% endif %}{%- endfor -%}{%- endif -%}" sizes="{{ sizes_attr }}">
-  <source type="image/webp" srcset="{%- if record and record.webp -%}{%- for f in record.webp.files -%}{{ teaser_path }}{{ f }} {{ f | split: '.' | first | split: '-' | last }}w{%- if forloop.last == false -%}, {% endif %}{%- endfor -%}{%- else -%}{%- for w in widths -%}{{ teaser_path }}{{ base }}-{{ w | strip }}.webp {{ w | strip }}w{%- if forloop.last == false -%}, {% endif %}{%- endfor -%}{%- endif -%}" sizes="{{ sizes_attr }}">
+  <source type="image/avif" srcset="{{ avif_srcset | strip }}" sizes="{{ sizes_attr }}">
+  <source type="image/webp" srcset="{{ webp_srcset | strip }}" sizes="{{ sizes_attr }}">
   <img loading="lazy" decoding="async"
        src="{{ teaser_path }}{{ base }}-800.png"
-       srcset="{%- if record and record.png -%}{%- for f in record.png.files -%}{{ teaser_path }}{{ f }} {{ f | split: '.' | first | split: '-' | last }}w{%- if forloop.last == false -%}, {% endif %}{%- endfor -%}{%- else -%}{%- for w in widths -%}{{ teaser_path }}{{ base }}-{{ w | strip }}.png {{ w | strip }}w{%- if forloop.last == false -%}, {% endif %}{%- endfor -%}{%- endif -%}"
+       srcset="{{ png_srcset | strip }}"
        sizes="{{ sizes_attr }}"
        width="1200" height="630" alt="{{ alt_text | escape }}">
 </picture>
