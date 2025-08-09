@@ -16,6 +16,7 @@ tags:
 description: A follow-up to my 2021 DoH post—now proxy to multiple providers in parallel, combine their filtering, and ship logs to Grafana Loki. Includes one‑click deploy and a simple config.
 header:
   teaser: /assets/images/teasers/doh-avoidance.svg
+  og_image: /assets/images/teasers/doh-avoidance.png
 image:
   path: /assets/images/teasers/doh-avoidance.png
   width: 1200

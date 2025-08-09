@@ -12,6 +12,7 @@ tags:
 description: Photos of Comet C/2020 F3 (NEOWISE)
 header:
   teaser: /assets/images/teasers/comet-neowise.svg
+  og_image: /assets/images/teasers/comet-neowise.png
 image:
   path: /assets/images/teasers/comet-neowise.png
   width: 1200
