@@ -121,23 +121,39 @@ intro:
       localStorage.setItem(LS_KEY_TEXT, computed);
     } catch(e) { /* Ignore storage errors (private mode, etc.) */ }
 
-    if(el.textContent.trim() !== computed) {
-      fadeSwap(el, computed);
+    var desired = computed;
+    // Apply immediately (no wait) to beat any later theme script
+    if(el.textContent.trim() !== desired) {
+      instantSet(el, desired);
     }
+    // Then do a subtle fade in (opacity already set to 1 by instantSet)
+    requestAnimationFrame(function(){ fadeIn(el); });
+
+    // Guard against later DOM mutations resetting the text
+    try {
+      var attempts = 0;
+      var observer = new MutationObserver(function(){
+        attempts++;
+        if(el.textContent.trim() !== desired) {
+          el.textContent = desired;
+        }
+        // Stop observing after a few stabilizations or 3s
+        if(attempts > 10) {
+          observer.disconnect();
+        }
+      });
+      observer.observe(el, { childList: true, characterData: true, subtree: true });
+      setTimeout(function(){ observer.disconnect(); }, 3000);
+    } catch(e) { /* ignore */ }
   }
 
-  function fadeSwap(el, text){
-    // Avoid layout shift: keep current height by setting explicit min-height once
-    if(!el.style.minHeight) {
-      el.style.minHeight = el.offsetHeight + 'px';
-    }
-    el.style.opacity = 0;
-    requestAnimationFrame(function(){
-      setTimeout(function(){
-        el.textContent = text;
-        el.style.opacity = 1;
-      }, 160); // allow fade out start
-    });
+  function instantSet(el, text){
+    if(!el.style.minHeight) { el.style.minHeight = el.offsetHeight + 'px'; }
+    el.style.opacity = 0; // start hidden
+    el.textContent = text;
+  }
+  function fadeIn(el){
+    el.style.opacity = 1;
   }
 
   if(document.readyState === 'loading') {
