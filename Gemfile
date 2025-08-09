@@ -1,8 +1,7 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 4.4"
-gem "minimal-mistakes-jekyll", "~> 4.27"
-
+gem "jekyll"
+gem "minimal-mistakes-jekyll"
 gem "jekyll-paginate-v2"
 gem "jekyll-gist"
 gem "jemoji"
