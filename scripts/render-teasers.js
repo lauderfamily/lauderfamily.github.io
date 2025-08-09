@@ -45,7 +45,7 @@ const thumbDir = path.join(teaserDir, 'thumbnails');
 const DEFAULT_WIDTHS = [400, 600, 800, 1200];
 const widths = (process.env.WIDTHS ? process.env.WIDTHS.split(',') : DEFAULT_WIDTHS).map(w => parseInt(w, 10)).filter(Boolean).sort((a,b)=>a-b);
 const thumbSize = parseInt(process.env.THUMBS || '300', 10);
-const force = !!process.env.FORCE;
+const force = !!process.env.FULL_CONTENT;
 const background = parseColor(process.env.BACKGROUND || '#0b0d0f');
 
 function parseColor(input) {
