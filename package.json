@@ -4,7 +4,7 @@
   "private": true,
   "description": "Build tools for generating assets for the Jekyll site",
   "scripts": {
-    "render:teasers": "node scripts/render-teasers.js"
+  "render:teasers": "node scripts/render-teasers.js"
   },
   "dependencies": {
     "sharp": "0.32.6",
