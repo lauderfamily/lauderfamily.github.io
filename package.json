@@ -7,7 +7,7 @@
     "render:teasers": "node scripts/render-teasers.js"
   },
   "dependencies": {
-    "sharp": "0.32.6",
-    "glob": "^10.4.5"
+    "sharp": "*",
+    "glob": "*"
   }
 }
