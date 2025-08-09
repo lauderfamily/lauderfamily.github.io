@@ -74,24 +74,29 @@ intro:
 // Uses dedicated span; fade removed for simplicity.
 (function() {
   var taglines = {{ site.data.taglines | jsonify }};
-  if(!Array.isArray(taglines) || !taglines.length) return; // Safety
+  var hasList = Array.isArray(taglines) && taglines.length > 0;
 
-  function dayOfYear(d){
-    var start = new Date(Date.UTC(d.getFullYear(),0,0));
-    return Math.floor((d - start) / 86400000); // 0..365
+  // Mountain Time date parts (numeric)
+  function mountainDateParts(){
+    var fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Denver', year:'numeric', month:'2-digit', day:'2-digit' });
+    var p = fmt.formatToParts(new Date());
+    return {
+      y: parseInt(p.find(q=>q.type==='year').value,10),
+      m: parseInt(p.find(q=>q.type==='month').value,10),
+      d: parseInt(p.find(q=>q.type==='day').value,10)
+    };
   }
-
-  function dailyIndex(len){
-    // Anchor calculation to Mountain Time (America/Denver) for consistent rollover
-    var mtNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }));
-    var idx = (dayOfYear(mtNow) + mtNow.getFullYear()) % len;
-    return idx;
+  // Simple random selection each visit (no persistence beyond page load)
+  function chooseRandom(list){
+    if(!list.length) return '';
+    return list[Math.floor(Math.random() * list.length)];
   }
 
   function setDailyTagline(){
     var container = document.querySelector('.page__lead');
     if(!container) return;
     var initial = container.querySelector('#dynamic-tagline-initial');
+    var fallbackText = initial ? initial.textContent.trim() : '(Loading)';
     // Replace initial span with dynamic span only once
     var el = container.querySelector('#dynamic-tagline');
     if(!el) {
@@ -100,47 +105,25 @@ intro:
       if(initial) initial.replaceWith(el); else container.appendChild(el);
     }
 
-    var todayIdx = dailyIndex(taglines.length);
-    var computed = taglines[todayIdx];
-
-    // Mountain Time date key
-    var mtNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }));
-    var dateKey = mtNow.getFullYear()+'-'+String(mtNow.getMonth()+1).padStart(2,'0')+'-'+String(mtNow.getDate()).padStart(2,'0');
-    var LS_KEY_DATE = 'dailyTaglineDate';
-    var LS_KEY_TEXT = 'dailyTaglineText';
-    try {
-      var storedDate = localStorage.getItem(LS_KEY_DATE);
-      var storedText = localStorage.getItem(LS_KEY_TEXT);
-      if(storedDate === dateKey && storedText) {
-        // Use cached text if still in list; else fall back to computed
-        if(taglines.indexOf(storedText) !== -1) {
-          if(el.textContent.trim() !== storedText) {
-            fadeSwap(el, storedText);
-          }
-          return; // Done for today
-        }
-      }
-      // Store today's choice
-      localStorage.setItem(LS_KEY_DATE, dateKey);
-      localStorage.setItem(LS_KEY_TEXT, computed);
-    } catch(e) { /* Ignore storage errors (private mode, etc.) */ }
-
-    var desired = computed;
-    if(el.textContent.trim() !== desired) {
-      fadeSwap(el, desired);
+    if(!hasList){
+      // No list available; keep fallback text visible
+      if(el.textContent.trim() !== fallbackText) el.textContent = fallbackText;
+      return;
     }
 
+  var desired = chooseRandom(taglines) || fallbackText;
+  if(el.textContent.trim() !== desired) fadeSwap(el, desired);
+
     // Lightweight polling fallback (covers late hydration scripts)
-    var start = Date.now();
-    var pollInterval = 500; // ms
-    var poller = setInterval(function(){
-      if(Date.now() - start > 15000) { clearInterval(poller); return; }
-      if(el.textContent.trim() !== desired) {
-        el.textContent = desired;
-      }
-    }, pollInterval);
-    // Also enforce once on page show (back/forward cache)
-    window.addEventListener('pageshow', function(){ if(el.textContent.trim() !== desired) el.textContent = desired; });
+      // Brief guard in case theme scripts rewrite early
+      var start = Date.now();
+      var pollInterval = 400;
+      var poller = setInterval(function(){
+        if(Date.now() - start > 4000) { clearInterval(poller); return; }
+        if(!document.body.contains(el)) clearInterval(poller);
+        else if(el.textContent.trim() === '' ) el.textContent = chooseRandom(taglines) || fallbackText;
+      }, pollInterval);
+      window.addEventListener('pageshow', function(){ if(el.textContent.trim() === '') el.textContent = chooseRandom(taglines) || fallbackText; }, { once:true });
   }
 
   function fadeSwap(el, text){
