@@ -13,6 +13,7 @@ exclude = [
   "https://www.lauder.family/assets/images/teasers/dry-island.svg",
   "https://www.lauder.family/assets/images/teasers/dbeaver-rds-iam.svg",
   "https://www.lauder.family/assets/images/teasers/comet-neowise.svg",
+  "https://www.lauder.family/feed.json",
 ]
 
 # Consider these statuses OK for rate-limited or walled sites
